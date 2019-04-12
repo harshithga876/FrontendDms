@@ -8,7 +8,7 @@ class Newcard extends Component {
 
         this.state = {
             values: [],
-            
+
         };
 
         this.changeData = this.changeData.bind(this);
@@ -21,14 +21,17 @@ class Newcard extends Component {
         console.log(localStorage.getItem("tokenId"))
 
         let headers = {
-            "Control-Allow-Origin": "*",
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            "tokenId": localStorage.getItem("tokenId")
+            headers: {
+                "Control-Allow-Origin": "*",
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
+                "tokenId": localStorage.getItem("tokenId")
+            }
+
         }
 
         axios
-            .get("http://192.168.1.154:8081/v1/doctype", headers)
+            .get("http://192.168.1.151:8090/v1/doctype", headers)
             .then(response => {
                 this.setState({
                     values: response.data
@@ -36,7 +39,7 @@ class Newcard extends Component {
                 });
 
             });
-    }
+    } git
 
     changeData(name, e) {
         this.state({
@@ -47,7 +50,7 @@ class Newcard extends Component {
         console.log(this.state);
         e.preventdefault();
     }
-   
+
     datedaat(element) {
 
         console.log(this.state);

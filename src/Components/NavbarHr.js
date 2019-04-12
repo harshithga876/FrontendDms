@@ -1,8 +1,6 @@
 import React from 'react';
 import axios from 'axios'
-import Email from './Email'
-import Autosuggest from 'react-autosuggest'
-import { debounce } from 'throttle-debounce'
+
 
 
 class Toolbar extends React.Component {
