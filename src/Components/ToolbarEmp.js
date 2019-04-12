@@ -5,12 +5,12 @@ import NavbarEmp from './NavbarEmp'
 import NewcardEmp from './NewcardEmp';
 //import './Toolbar.css'
 class Toolbar extends Component {
-   
+
     render() {
         return (
             <div>
                 <NavbarEmp />
-                
+
 
                 <NewcardEmp />
             </div>);

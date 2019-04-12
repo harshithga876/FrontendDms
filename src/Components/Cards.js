@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardTitle, Button, Row, CardGroup, Col, CardText, } from "reactstrap";
+import {  Row, CardGroup, Col, } from "reactstrap";
 import './NewcardEmp'
 import './Newcardhr'
 import "./Newcard.css";
@@ -26,7 +26,7 @@ class Cards extends Component {
 
         axios
             .post(
-                "http://192.168.1.20:8080/v1/upload?fileType=" +
+                "http://192.168.1.20:8081/v1/upload?fileType=" +
                 this.state.selectedFileType,
                 data,
                 {
@@ -56,57 +56,64 @@ class Cards extends Component {
         event.preventDefault()
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
-        let name=this.props.element.fileType
+        let name = this.props.element.fileType
         const FileDownload = require('js-file-download');
-        axios.get(`http://192.168.1.20:8080/v1/download?fileType=`+ name,{
-            headers:{
-                'tokenId':token
-            }
-        })
-            .then((response) => {
-                FileDownload(response.data, 'report.xls');
-            });
-     
+        axios({
+            url: `http://192.168.1.20:8081/v1/download?fileType=` + name,
+            method: 'GET',
+            responseType: 'blob', // important
+            headers:"token"
+          }).then((response) => {
+             const url = window.URL.createObjectURL(new Blob([response.data]));
+             const link = document.createElement('a');
+             link.href = url;
+             link.setAttribute('download', name); //or any other extension
+             document.body.appendChild(link);
+             link.click();
+          });
+
+
+
+
+
+        // axios.get(`http://192.168.1.20:8081/v1/download?fileType=` + name, {
+        //     headers: {
+        //         'tokenId': token
+        //     }
+        // })
+        //     .then((response) => {
+        //         FileDownload(response.data, this.props.element.fileType);
+        //     });
+
         {
             this.setState({
                 isDownloaded: false
-
             });
         }
     }
 
     handleDelete = event => {
+
         event.preventDefault()
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
+        let name = this.props.element.fileType
 
-        axios.get(
-            "http://192.168.1.20:8080/v1/download?fileType=" + this.state.selectedFileType
-            , {
-                headers: {
-                    "tokenId": token
-                },
-
-
+        axios.get(`http://192.168.1.20:8081/v1/delete?fileType=` + name, {
+            headers: {
+                'tokenId': token
             }
-        )
-
-
-
-            .then(response => {
-                const filename = response.headers.get('Content-Disposition').split('filename=')[1];
-                response.blob().then(blob => {
-                    let url = window.URL.createObjectURL(blob);
-                    let a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    a.click();
-                });
+        })
+            .then((response) => {
+                alert('deleted')
             });
-        this.setState({
-            isDeleted: false
 
-        });
+        {
+            this.setState({
+                isDeleted: false
+            });
+        }
+
 
     }
     constructor(props) {
@@ -116,7 +123,7 @@ class Cards extends Component {
             isDownloaded: true,
             isDeleted: true,
             fileChosen: false,
-            text:''
+            text: ''
 
 
         }
@@ -128,14 +135,17 @@ class Cards extends Component {
                 <Row sm='4'>
                     <Col xl="4">
                         <CardGroup>
-                            <Card body inverse style={{ backgroundColor: '#333', borderColor: 'primary' }}>
-                                <CardTitle>{this.props.element ? this.props.element.displayName : ""}</CardTitle>
-                                <CardText><input type='file' id={this.props.element ? this.props.element.fileType : ""} onChange={this.handleselectedFile} disabled={(this.state.fileChosen ? "disabled" : "")}></input></CardText>
-                                <Button color='success' onClick={this.handleUpload} disabled={this.state.isUploaded}>Upload</Button>
-                                <Button color='primary' onClick={this.handleDownload} disabled={this.state.isDownloaded} >Download</Button>
-                                <Button color='danger' onClick={this.handleDelete} disabled={this.state.isDeleted} >Archive</Button>
+                            <div class="card bg-light border-dark mb-3" >
 
-                            </Card>
+                                <div class="card-header">{this.props.element ? this.props.element.displayName : ""}</div>
+                                <div class="card-body">
+                                    <h5 class="card-title"><input type='file' id={this.props.element ? this.props.element.fileType : ""} onChange={this.handleselectedFile} disabled={(this.state.fileChosen ? "disabled" : "")}></input></h5>
+                                    <button type="button" class="btn btn-secondary" onClick={this.handleUpload} disabled={this.state.isUploaded}>Upload</button>
+                                    <button type="button" class="btn btn-secondary" onClick={this.handleDownload} disabled={this.state.isDownloaded}>Download</button>
+                                    <button type="button" class="btn btn-secondary" onClick={this.handleDelete} disabled={this.state.isDeleted}>Delete</button>
+                                </div>
+                            </div>
+                            
                         </CardGroup>
                     </Col>
                 </Row>

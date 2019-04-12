@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Navbarhr from './NavbarHr'
+
+import NavbarEmp from './NavbarEmp';
 class ViewListhr extends Component {
     state = {  }
     render() { 
         return ( <div>
-            <Navbarhr/>
-            hello world
+            <NavbarEmp/>
+            
         </div> );
     }
 }

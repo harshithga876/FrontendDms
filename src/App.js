@@ -4,6 +4,7 @@ import ToolbarEmp from "./Components/ToolbarEmp";
 import "./App.css";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Route from "react-router-dom/Route";
+import ViewListhr from "./Components/ViewListhr.js";
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
 
             <Route path="/" exact component={Login} />
             <Route path="/ToolbarEmp" exact component={ToolbarEmp} />
+            <Route path='/ViewListhr' exact component={ViewListhr}/>  
           </Switch>
         </div>
       </Router>

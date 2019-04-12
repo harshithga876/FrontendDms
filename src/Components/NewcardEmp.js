@@ -24,11 +24,11 @@ class Newcard extends Component {
             "Control-Allow-Origin": "*",
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
-            "tokenId": token
+            "tokenId": localStorage.getItem("tokenId")
         }
 
         axios
-            .get("http://192.168.1.20:8080/v1/doctype", headers)
+            .get("http://192.168.1.154:8081/v1/doctype", headers)
             .then(response => {
                 this.setState({
                     values: response.data
