@@ -26,7 +26,7 @@ class Cards extends Component {
 
         axios
             .post(
-                "http://192.168.1.20:8081/v1/upload?fileType=" +
+                "http://192.168.1.151:8090/v1/upload?fileType=" +
                 this.state.selectedFileType,
                 data,
                 {
@@ -59,7 +59,7 @@ class Cards extends Component {
         let name = this.props.element.fileType
         const FileDownload = require('js-file-download');
         axios({
-            url: `http://192.168.1.20:8081/v1/download?fileType=` + name,
+            url: `http://192.168.1.151:8090/v1/download?fileType=` + name,
             method: 'GET',
             responseType: 'blob', // important
             headers:"token"
@@ -76,7 +76,7 @@ class Cards extends Component {
 
 
 
-        // axios.get(`http://192.168.1.20:8081/v1/download?fileType=` + name, {
+        // axios.get(`http://192.168.1.151:8090/v1/download?fileType=` + name, {
         //     headers: {
         //         'tokenId': token
         //     }
@@ -99,7 +99,7 @@ class Cards extends Component {
         console.log(token)
         let name = this.props.element.fileType
 
-        axios.get(`http://192.168.1.20:8081/v1/delete?fileType=` + name, {
+        axios.get(`http://192.168.1.151:8090/v1/delete?fileType=` + name, {
             headers: {
                 'tokenId': token
             }
