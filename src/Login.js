@@ -17,7 +17,10 @@ class Login extends Component {
 
         let id_token = response.getAuthResponse().id_token;
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://192.168.1.151:8090/v1/signin");
+
+
+        xhr.open("POST", "http://192.168.1.20:8090/v1/signin");
+
 
         xhr.setRequestHeader("WE", "tokenId");
         xhr.onload = function () {
