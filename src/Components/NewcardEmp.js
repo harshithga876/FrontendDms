@@ -5,39 +5,46 @@ import Cards from "./Cards";
 class Newcard extends Component {
   constructor(props) {
     super(props);
-
-
-
     this.state = {
-      values: []
+      values: [],
+      files:[]
+      
     };
-
-
     this.changeData = this.changeData.bind(this);
     this.postIt = this.postIt.bind(this);
     this.datedaat = this.datedaat.bind(this);
   }
-
   componentWillMount() {
     var token = localStorage.getItem("tokenId");
-    console.log(localStorage.getItem("tokenId"));
 
-
-    let header = {
-      headers: {
-        "Control-Allow-Origin": "*",
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-        tokenId: localStorage.getItem("tokenId")
-      }
-    };
-
-    axios.get("http://192.168.1.151:8090/v1/doctype", header).then(response => {
+    console.log(localStorage.getItem('tokenId'));
+    
+    axios.get("http://192.168.1.20:8090/v1/doctype?login=" + token).then(response => {
       this.setState({
         values: response.data
       });
     });
   }
+  // componentDidMount(){
+  //   var token =localStorage.getItem('tokenId')
+  //   console.log('tokenId')
+  //   let userid=window.localStorage.getItem('userId')
+  //   console.log(userid)
+    
+  //   axios.get('http://192.168.1.20:8090/v1/view',
+  //       {
+  //           params: {
+  //               'login': token,
+  //               'userId':userid
+  //           }
+  //       }
+  //       )
+  //   .then(response =>{
+  //     this.setState({
+  //       values:response.data
+  //     })
+  //   })
+  // }
 
 
   changeData(name, e) {
@@ -69,7 +76,7 @@ class Newcard extends Component {
     console.log(cards);
     return (
       <div className="container">
-        {this.state.values.map(function(object, i) {
+        {this.state.values.map(function (object, i) {
           return <Cards element={object} key={i} />;
         })}
       </div>

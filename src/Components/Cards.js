@@ -20,26 +20,33 @@ class Cards extends Component {
 
         let token = window.localStorage.getItem("tokenId");
         console.log(token);
-        let data = new FormData();
+        let userid = window.localStorage.getItem('userId')
+        console.log(userid)
+
+        var data = new FormData();
         data.append("file", this.state.selectedFile);
         data.append("name", "test");
 
         axios
             .post(
-                "http://192.168.1.151:8090/v1/upload?fileType=" +
-                this.state.selectedFileType,
-                data,
+                "http://192.168.1.20:8090/v1/upload", data,
+
+
                 {
-                    headers: {
-                        //"Content-Type": "multipart/form-data",
-                        "tokenId": token
+                    params: {
+                        'login': token,
+                        'userId': userid,
+                        'fileType': this.state.selectedFileType
+
                     }
                 }
             )
             .then(response => {
 
                 (window.alert("Document uploaded Succesfully"));
-            });
+                
+            })
+            
         {
             this.setState({
                 isUploaded: true,
@@ -57,39 +64,39 @@ class Cards extends Component {
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
         let name = this.props.element.fileType
-        const FileDownload = require('js-file-download');
-        axios({
-            url: `http://192.168.1.151:8090/v1/download?fileType=` + name,
-            method: 'GET',
-            responseType: 'blob', // important
-            headers: "token"
-        }).then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', name); //or any other extension
-            document.body.appendChild(link);
-            link.click();
-        });
+        // var params= new URLSearchParams()
+        // params.append('login',token)
+        // params.append('fileType',name)
+        axios.get('http://192.168.1.20:8090/v1/download',
+            {
+                params: {
+                    'login': token,
+                    'fileType': name
+                }
+            }
+        )
+            //     fetch('http://192.168.1.20:8090/v1/download', {
+            //         method: "GET",
+            //         params: {'login': token,
+            //         'fileType':name
+            //     }
+            // }
+            //     )
 
 
 
-
-
-        // axios.get(`http://192.168.1.151:8090/v1/download?fileType=` + name, {
-        //     headers: {
-        //         'tokenId': token
-        //     }
-        // })
-        //     .then((response) => {
-        //         FileDownload(response.data, this.props.element.fileType);
-        //     });
-
-        {
-            this.setState({
-                isDownloaded: false
+            .then(response => {
+                let filename = response.headers.get('Content-Disposition').split('')[1]
+                response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                });
             });
-        }
+
+
     }
 
     handleDelete = event => {
@@ -99,9 +106,9 @@ class Cards extends Component {
         console.log(token)
         let name = this.props.element.fileType
 
-        axios.get(`http://192.168.1.151:8090/v1/delete?fileType=` + name, {
-            headers: {
-                'tokenId': token
+        axios.get(`http://192.168.1.20:8090/v1/delete?fileType=` + name, {
+            params: {
+                'login': token
             }
         })
             .then((response) => {
@@ -135,14 +142,15 @@ class Cards extends Component {
                 <Row sm='4'>
                     <Col xl="4">
                         <CardGroup>
-                            <div class="card bg-light border-dark mb-3" >
+                            <div className="card bg-light border-dark mb-3" >
 
-                                <div class="card-header">{this.props.element ? this.props.element.displayName : ""}</div>
-                                <div class="card-body">
-                                    <h5 class="card-title"><input type='file' id={this.props.element ? this.props.element.fileType : ""} onChange={this.handleselectedFile} disabled={(this.state.fileChosen ? "disabled" : "")}></input></h5>
-                                    <button type="button" class="btn btn-secondary" onClick={this.handleUpload} disabled={this.state.isUploaded}>Upload</button>
-                                    <button type="button" class="btn btn-secondary" onClick={this.handleDownload} disabled={this.state.isDownloaded}>Download</button>
-                                    <button type="button" class="btn btn-secondary" onClick={this.handleDelete} disabled={this.state.isDeleted}>Delete</button>
+                                <div className="card-header">{this.props.element ? this.props.element.displayName : ""}</div>
+                                <div className="card-body">
+                                    <h5 className="card-title"><input type='file' id={this.props.element ? this.props.element.fileType : ""} onChange={this.handleselectedFile} disabled={(this.state.fileChosen ? "disabled" : "")}></input></h5>
+                                    <button type="button" className="btn btn-secondary" onClick={this.handleUpload} disabled={this.state.isUploaded}>Upload</button>
+                                    <button type="button" className="btn btn-secondary" onClick={this.handleDownload} disabled={this.state.isDownloaded}>Download</button>
+                                    <button type="button" className="btn btn-secondary" onClick={this.handleDelete} disabled={this.state.isDeleted}>Delete</button>
+                                   
                                 </div>
                             </div>
 

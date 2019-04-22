@@ -1,11 +1,5 @@
-
-
-
 import React from "react";
-import axios from "axios";
 import Navigation from "./Navigation";
-
-
 class Toolbar extends React.Component {
   render() {
     return (
