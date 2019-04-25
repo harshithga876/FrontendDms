@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
+import { Redirect } from 'react-router-dom'
+import ViewListhr from './View'
 
 const NavItem = props => {
-  
+
 };
 
 class Navigation extends React.Component {
@@ -10,39 +12,46 @@ class Navigation extends React.Component {
     super(props);
     this.state = {
       result: [],
-      redirect:false
+      redirect: false
     };
 
     this.handleSearch = this.handleSearch.bind(this);
     this.redirectMethod = this.redirectMethod.bind(this);
   }
+ 
+
   redirectMethod = event => {
+    
     console.log(event);
-    this.setState({
-      redirect:true
-    })
-     
+    return(
+      <div>
+    
+        <ViewListhr/>
+      </div>
+    )
+    
+
   };
 
   handleSearch = event => {
     let token = window.localStorage.getItem("tokenId");
     console.log(token);
-    let header = {
-      headers: {
-        tokenId: token
-      }
-    };
+    // let header = {
+    //   headers: {
+    //     tokenId: token
+    //   }
+    // };
     if (event.target && event.target.value.length >= 3) {
       axios
         .get(
           "http://192.168.1.20:8090/v1/search?text=" + event.target.value,
           {
             params: {
-                'login': token,
-                
+              'login': token,
+
             }
-        }
-          
+          }
+
         )
         .then(response => {
           this.setState({
@@ -73,13 +82,10 @@ class Navigation extends React.Component {
             <div
               key={index}
               value={name}
-              onClick={this.redirectMethod.bind(this, name)}
+              onClick={this.redirectMethod.bind(this,name)}
             >
-            <div>
-              <ul>
-              <li> {name.emailId} </li>
-              </ul>
-              </div>
+              <li> {name.emailId}
+              </li>
             </div>
           );
         })}

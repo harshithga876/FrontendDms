@@ -16,7 +16,7 @@ class NavbarEmp extends Component {
               <a className="nav-link" href="/">Logout</a>
             </li>
             <li className='nav-item active'>
-              <a className='nav-link' href='/ViewListhr'>View</a>
+              <a className='nav-link' href='/View'>View</a>
             </li>
           </ul>
         </div>

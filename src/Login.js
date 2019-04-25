@@ -9,43 +9,22 @@ class Login extends Component {
         this.state = { isAuthenticated: false, user: null, token: "" };
     }
 
-    // componentWillMount() {
-    //     var headers = {
-    //         headers: {
-    //             tokenId: "token",
-    //             'Access-Control-Allow-Origin': '*',
-    //             'Access-Control-Allow-Methods': 'GET',
-    //             'Access-Control-Allow-Headers': 'Content-Type',
-    //             'Access-Control-Allow-Credentials': 'true'
-    //         }
-    //     }
-    //     Axios.get("http://192.168.1.20:8089/v1/signin", headers)
-    //         .then(response => {
-    //             window.localStorage.setItem("view", response)
-    //             window.localStorage.setItem("tokenId", "token");
-
-    //             console.log("Signed in as: " + response);
-    //             window.location.href = "/ToolbarEmp";
-
-    //         })
-    // }
-
     logout = () => {
         this.setState({ isAuthenticated: false, token: "", user: null });
     };
 
     googleResponse = googleResponse => {
-        // var header = {
-        //     headers: {
-        //         tokenId: googleResponse.getAuthResponse().id_token,
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Methods': 'GET',
-        //         'Access-Control-Allow-Headers': 'Content-Type',
-        //         'Access-Control-Allow-Credentials': 'true'
-        //     }
-        // }
+        var header = {
+            headers: {
+                tokenId: googleResponse.getAuthResponse().id_token,
+                'Access-Control-Allow-Origin': '*',
+                // 'Access-Control-Allow-Methods': 'GET',
+                // 'Access-Control-Allow-Headers': 'Content-Type',
+                // 'Access-Control-Allow-Credentials': 'true'
+            }
+        }   
 
-        Axios.get("http://192.168.1.20:8090/v1/signin?login=" + googleResponse.getAuthResponse().id_token)
+        Axios.get("http://192.168.1.20:8090/v1/signin" , header)
             .then(responseText => {
 
                 window.localStorage.setItem("tokenId", googleResponse.getAuthResponse().id_token);

@@ -10,7 +10,9 @@ class Cards extends Component {
         this.setState({
             selectedFile: event.target.files[0],
             selectedFileType: event.target.id,
-            loaded: 100
+            loaded: 100,
+            isUploaded: false
+
 
         });
     };
@@ -23,30 +25,39 @@ class Cards extends Component {
         let userid = window.localStorage.getItem('userId')
         console.log(userid)
 
+
         var data = new FormData();
         data.append("file", this.state.selectedFile);
         data.append("name", "test");
 
+
+
+        var header = {
+            headers: {
+                tokenId: token,
+                'Access-Control-Allow-Origin': '*',
+
+            }
+        }
+        var params = new URLSearchParams();
+        params.append('userId', userid);
+        params.append('fileType', this.state.selectedFileType);
+
         axios
             .post(
-                "http://192.168.1.20:8090/v1/upload", data,
+                "http://192.168.1.20:8090/v1/upload", data, header,params
 
 
-                {
-                    params: {
-                        'login': token,
-                        'userId': userid,
-                        'fileType': this.state.selectedFileType
+                // {
+                //     params: {
 
-                    }
-                }
+                //         'userId': userid,
+                //         'fileType': this.state.selectedFileType
+
+                //     }
+                // }
             )
-            .then(response => {
 
-                (window.alert("Document uploaded Succesfully"));
-                
-            })
-            
         {
             this.setState({
                 isUploaded: true,
@@ -64,40 +75,37 @@ class Cards extends Component {
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
         let name = this.props.element.fileType
-        // var params= new URLSearchParams()
-        // params.append('login',token)
-        // params.append('fileType',name)
-        axios.get('http://192.168.1.20:8090/v1/download',
-            {
-                params: {
-                    'login': token,
-                    'fileType': name
-                }
+        var header = {
+            headers: {
+                tokenId: token,
+                'Access-Control-Allow-Origin': '*',
+                // 'Access-Control-Allow-Methods': 'GET',
+                // 'Access-Control-Allow-Headers': 'Content-Type',
+                // 'Access-Control-Allow-Credentials': 'true'
             }
-        )
-            //     fetch('http://192.168.1.20:8090/v1/download', {
-            //         method: "GET",
-            //         params: {'login': token,
-            //         'fileType':name
-            //     }
-            // }
-            //     )
-
-
-
+        }
+        fetch('http://192.168.1.20:8090/v1/download?fileType=' + name, header)
+            // var url = new URL('http://192.168.1.20:8090/v1/download')
+            // var params = { login: token,fileType:name} 
+            // url.search = new URLSearchParams(params)
+            // fetch(url)
             .then(response => {
-                let filename = response.headers.get('Content-Disposition').split('')[1]
+                let filename = response.headers.get('Content-Disposition')
                 response.blob().then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = filename;
+                    a.download = this.props.element.fileType;
                     a.click();
                 });
             });
 
-
-    }
+        {
+            this.setState({
+                isDownloaded: false
+            });
+        }
+    };
 
     handleDelete = event => {
 
@@ -105,12 +113,25 @@ class Cards extends Component {
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
         let name = this.props.element.fileType
-
-        axios.get(`http://192.168.1.20:8090/v1/delete?fileType=` + name, {
-            params: {
-                'login': token
+        let userid = window.localStorage.getItem('userId')
+        var header = {
+            headers: {
+                tokenId: token,
+                'Access-Control-Allow-Origin': '*',
+                
             }
-        })
+        }
+
+        axios.get(`http://192.168.1.20:8090/v1/delete?fileType=`+name, header,
+            {
+                params: {
+
+                    //'fileType': name,
+                    'userId': userid
+
+                }
+            }
+        )
             .then((response) => {
                 alert('deleted')
             });
@@ -126,7 +147,7 @@ class Cards extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isUploaded: false,
+            isUploaded: true,
             isDownloaded: true,
             isDeleted: true,
             fileChosen: false,
@@ -150,7 +171,7 @@ class Cards extends Component {
                                     <button type="button" className="btn btn-secondary" onClick={this.handleUpload} disabled={this.state.isUploaded}>Upload</button>
                                     <button type="button" className="btn btn-secondary" onClick={this.handleDownload} disabled={this.state.isDownloaded}>Download</button>
                                     <button type="button" className="btn btn-secondary" onClick={this.handleDelete} disabled={this.state.isDeleted}>Delete</button>
-                                   
+
                                 </div>
                             </div>
 

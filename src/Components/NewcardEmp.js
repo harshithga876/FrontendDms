@@ -18,8 +18,17 @@ class Newcard extends Component {
     var token = localStorage.getItem("tokenId");
 
     console.log(localStorage.getItem('tokenId'));
+    var header = {
+      headers: {
+          tokenId: token,
+          'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Methods': 'GET',
+          // 'Access-Control-Allow-Headers': 'Content-Type',
+          // 'Access-Control-Allow-Credentials': 'true'
+      }
+  }
     
-    axios.get("http://192.168.1.20:8090/v1/doctype?login=" + token).then(response => {
+    axios.get("http://192.168.1.20:8090/v1/doctype", header).then(response => {
       this.setState({
         values: response.data
       });
