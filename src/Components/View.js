@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import NavbarEmp from './NavbarEmp'
+import NavbarHr from './NavbarHr'
 
 
 
@@ -10,7 +10,7 @@ class View extends Component {
     render() {
         return (
             <div>
-                <NavbarEmp />
+                <NavbarHr />
 
 
                 <ViewFile />

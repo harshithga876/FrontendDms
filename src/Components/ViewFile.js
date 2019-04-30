@@ -14,9 +14,9 @@ class ViewFile extends Component {
     
     componentWillMount(){
         var token =localStorage.getItem('tokenId')
-        console.log('tokenId')
+        // console.log('tokenId')
         let userid=window.localStorage.getItem('userId')
-        console.log(userid)
+        // console.log(userid)
         var header = {
           headers: {
               tokenId: token,
@@ -27,7 +27,7 @@ class ViewFile extends Component {
           }
       }
         
-        axios.get('http://192.168.1.20:8090/v1/view?userId='+userid,header
+        axios.get('http://192.168.1.154:8090/v1/view?userId='+userid,header
             // {
             //     params: {
             //         'login': token,

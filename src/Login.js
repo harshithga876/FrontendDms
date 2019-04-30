@@ -18,11 +18,11 @@ class Login extends Component {
             headers: {
                 tokenId: googleResponse.getAuthResponse().id_token,
                 'Access-Control-Allow-Origin': '*',
-                
-            }
-        }   
 
-        Axios.get("http://192.168.1.20:8090/v1/signin" , header)
+            }
+        }
+
+        Axios.get("http://192.168.1.20:8090/v1/signin", header)
             .then(responseText => {
 
                 window.localStorage.setItem("tokenId", googleResponse.getAuthResponse().id_token);
@@ -33,17 +33,18 @@ class Login extends Component {
 
                 console.log("Signed in as: " + data);
                 let res = JSON.parse(data)
+                console.log(res)
 
                 let uid = (res.data.userId)
                 console.log(uid)
                 window.localStorage.setItem('userId', uid)
                 let userid = window.localStorage.getItem('userId')
                 console.log(userid)
-                 let view =(res.data.view)
-                 console.log(view) 
-                 if (view ==='intern') {
+                let view = (res.data.view)
+                console.log(view)
+                 if (view ==='HR') {
                     window.location.href = "/Toolbarhr";
-                     
+
                  }
                  else
                  {
@@ -81,14 +82,14 @@ class Login extends Component {
                     <div className="login">
                         <h1>Welcome To Document Management System</h1>
                         <h2>Login To access dcouments</h2>
-                        
+
                         <GoogleLogin
                             clientId="467598396544-usbqpbfg4h2v6282tdr64dgim05klu5v.apps.googleusercontent.com"
                             buttonText="Login"
                             onSuccess={this.googleResponse}
                             onFailure={this.onFailure}
                         />
-                        
+
                     </div>
                 </div>
             );

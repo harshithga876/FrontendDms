@@ -27,31 +27,28 @@ class Newcard extends Component {
       }
     }
     axios.get("http://192.168.1.20:8090/v1/doctype", header).then(response => {
-      this.setState({
-        values: response.data
-      });
       axios({
         method: 'get',
         url: "http://192.168.1.20:8090/v1/view",
         headers: {
-            tokenId: token,
-            'Access-Control-Allow-Origin': '*',
+          tokenId: token,
+          'Access-Control-Allow-Origin': '*',
         },
         params: {
-            'userId': userid
+          'userId': userid
         }
-    }).then(responses => {
-      this.setState({
-        files:response.data
+      }).then(responses => {
+        this.setState({
+          values: response.data,
+          files: responses.data
+        })
       })
-        console.log(responses)
-    })
 
     }).catch(error => {
       console.log(error)
     })
   }
-    changeData(name, e) {
+  changeData(name, e) {
     this.state({
       [name]: e.target.value
     });
@@ -60,25 +57,20 @@ class Newcard extends Component {
     console.log(this.state);
     e.preventdefault();
   }
-    datedaat(element) {
+  datedaat(element) {
     console.log(this.state);
 
     return <div className="container" />;
   }
   render() {
-    let cards = [];
-    // Outer loop to create parent
-    this.state.values.forEach(element => {
-      console.log(this.state);
-      //Create the parent and add the children
-      cards.push(this.datedaat(element));
-    });
-    console.log(cards);
     return (
       <div className="container">
-        {this.state.values.map(function (object, i) {
-          return <Cards element={object} key={i} />;
-        })}
+        
+        {this.state.values.map((object, i) => {
+          console.log(this.state.files.length)
+          return <Cards fileData={this.state.files} element={object} />;
+        })
+        }
       </div>
     );
   }

@@ -66,8 +66,8 @@ class Cards extends Component {
                     }
                 }).then(responses => {
                     this.setState({
-                        isUploaded:false,
-                        fileChosen:false
+                        isUploaded: true,
+                        fileChosen: true
                     })
                     console.log(responses)
                 })
@@ -75,14 +75,14 @@ class Cards extends Component {
             }).catch(error => {
 
             })
-        
+
         {
             this.setState({
                 isUploaded: true,
                 isDownloaded: false,
                 isDeleted: false,
                 fileChosen: true,
-                
+
 
 
             });
@@ -152,12 +152,13 @@ class Cards extends Component {
 
         {
             this.setState({
-                isDeleted: false
+                isDeleted: false,
+                isUploaded: false,
+                fileChosen: false
             });
         }
-
-
     }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -165,20 +166,31 @@ class Cards extends Component {
             isDownloaded: true,
             isDeleted: true,
             fileChosen: false,
-            
-
-
         }
     }
+
+    componentWillMount() {
+        this.props.fileData.map((data, index) => {
+            if (data.fileType == this.props.element.fileType) {
+                this.setState({
+                    isUploaded: true,
+                    isDownloaded: false,
+                    isDeleted: false,
+                    fileChosen: true,
+                })
+            }
+        })
+    }
+
+
+
     render() {
-        console.log(this.props);
         return (
             <div className='container'>
                 <Row sm='4'>
                     <Col xl="4">
                         <CardGroup>
                             <div className="card bg-light border-dark mb-3" >
-
                                 <div className="card-header">{this.props.element ? this.props.element.displayName : ""}</div>
                                 <div className="card-body">
                                     <h5 className="card-title"><input type='file' id={this.props.element ? this.props.element.fileType : ""} onChange={this.handleselectedFile} disabled={(this.state.fileChosen ? "disabled" : "")}></input></h5>
