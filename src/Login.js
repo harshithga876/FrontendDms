@@ -18,9 +18,7 @@ class Login extends Component {
             headers: {
                 tokenId: googleResponse.getAuthResponse().id_token,
                 'Access-Control-Allow-Origin': '*',
-                // 'Access-Control-Allow-Methods': 'GET',
-                // 'Access-Control-Allow-Headers': 'Content-Type',
-                // 'Access-Control-Allow-Credentials': 'true'
+                
             }
         }   
 
@@ -34,13 +32,23 @@ class Login extends Component {
                 let data = JSON.stringify(responseText)
 
                 console.log("Signed in as: " + data);
-                let view = JSON.parse(data)
+                let res = JSON.parse(data)
 
-                let uid = (view.data.userId)
+                let uid = (res.data.userId)
                 console.log(uid)
                 window.localStorage.setItem('userId', uid)
                 let userid = window.localStorage.getItem('userId')
                 console.log(userid)
+                 let view =(res.data.view)
+                 console.log(view) 
+                 if (view ==='intern') {
+                    window.location.href = "/Toolbarhr";
+                     
+                 }
+                 else
+                 {
+                     window.location.href='/ToolbarEmp'
+                 }
 
 
 
@@ -73,14 +81,14 @@ class Login extends Component {
                     <div className="login">
                         <h1>Welcome To Document Management System</h1>
                         <h2>Login To access dcouments</h2>
-                        {/* <Link to='/Navbar'> */}
+                        
                         <GoogleLogin
                             clientId="467598396544-usbqpbfg4h2v6282tdr64dgim05klu5v.apps.googleusercontent.com"
                             buttonText="Login"
                             onSuccess={this.googleResponse}
                             onFailure={this.onFailure}
                         />
-                        {/* </Link> */}
+                        
                     </div>
                 </div>
             );

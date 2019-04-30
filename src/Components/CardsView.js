@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { Row, CardGroup, Col, } from "reactstrap";
 
 import './Newcardhr'
-
-
 class CardsView extends Component {
-
-   
-    
     
     constructor(props) {
         super(props);
@@ -17,8 +12,6 @@ class CardsView extends Component {
             isDeleted: true,
             fileChosen: false,
             text: ''
-
-
         }
     }
     render() {

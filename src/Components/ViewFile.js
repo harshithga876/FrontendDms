@@ -17,14 +17,23 @@ class ViewFile extends Component {
         console.log('tokenId')
         let userid=window.localStorage.getItem('userId')
         console.log(userid)
+        var header = {
+          headers: {
+              tokenId: token,
+              'Access-Control-Allow-Origin': '*',
+              // 'Access-Control-Allow-Methods': 'GET',
+              // 'Access-Control-Allow-Headers': 'Content-Type',
+              // 'Access-Control-Allow-Credentials': 'true'
+          }
+      }
         
-        axios.get('http://192.168.1.20:8090/v1/view',
-            {
-                params: {
-                    'login': token,
-                    'userId':userid
-                }
-            }
+        axios.get('http://192.168.1.20:8090/v1/view?userId='+userid,header
+            // {
+            //     params: {
+            //         'login': token,
+            //         'userId':userid
+            //     }
+            // }
             )
         .then(response =>{
           this.setState({

@@ -30,41 +30,59 @@ class Cards extends Component {
         data.append("file", this.state.selectedFile);
         data.append("name", "test");
 
-
-
-        var header = {
+        axios({
+            method: 'post',
+            url: "http://192.168.1.20:8090/v1/upload",
             headers: {
                 tokenId: token,
                 'Access-Control-Allow-Origin': '*',
 
-            }
-        }
-        var params = new URLSearchParams();
-        params.append('userId', userid);
-        params.append('fileType', this.state.selectedFileType);
+            },
+            params: {
 
-        axios
-            .post(
-                "http://192.168.1.20:8090/v1/upload", data, header,params
+                'fileType': this.state.selectedFileType,
+                'userId': userid
 
+            },
+            data: data
+        })
+            .then(response => {
+                console.log(response)
+                let data = JSON.stringify(response)
+                let result = JSON.parse(data)
+                let status = (result.data.message)
+                let mes = (result.data.details)
+                window.alert(mes)
+                console.log(status)
+                axios({
+                    method: 'get',
+                    url: "http://192.168.1.20:8090/v1/view",
+                    headers: {
+                        tokenId: token,
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    params: {
+                        'userId': userid
+                    }
+                }).then(responses => {
+                    this.setState({
+                        isUploaded:false,
+                        fileChosen:false
+                    })
+                    console.log(responses)
+                })
 
-                // {
-                //     params: {
+            }).catch(error => {
 
-                //         'userId': userid,
-                //         'fileType': this.state.selectedFileType
-
-                //     }
-                // }
-            )
-
+            })
+        
         {
             this.setState({
                 isUploaded: true,
                 isDownloaded: false,
                 isDeleted: false,
                 fileChosen: true,
-                text: this.props.element.displayName
+                
 
 
             });
@@ -79,16 +97,11 @@ class Cards extends Component {
             headers: {
                 tokenId: token,
                 'Access-Control-Allow-Origin': '*',
-                // 'Access-Control-Allow-Methods': 'GET',
-                // 'Access-Control-Allow-Headers': 'Content-Type',
-                // 'Access-Control-Allow-Credentials': 'true'
+
             }
         }
         fetch('http://192.168.1.20:8090/v1/download?fileType=' + name, header)
-            // var url = new URL('http://192.168.1.20:8090/v1/download')
-            // var params = { login: token,fileType:name} 
-            // url.search = new URLSearchParams(params)
-            // fetch(url)
+
             .then(response => {
                 let filename = response.headers.get('Content-Disposition')
                 response.blob().then(blob => {
@@ -102,7 +115,8 @@ class Cards extends Component {
 
         {
             this.setState({
-                isDownloaded: false
+                isDownloaded: false,
+
             });
         }
     };
@@ -112,26 +126,26 @@ class Cards extends Component {
         event.preventDefault()
         let token = window.localStorage.getItem("tokenId");
         console.log(token)
-        let name = this.props.element.fileType
+
         let userid = window.localStorage.getItem('userId')
-        var header = {
+
+
+        axios({
+            method: 'post',
+            url: "http://192.168.1.20:8090/v1/delete",
             headers: {
                 tokenId: token,
                 'Access-Control-Allow-Origin': '*',
-                
+
+            },
+            params: {
+
+                'fileType': this.state.selectedFileType,
+                'userId': userid
+
             }
-        }
 
-        axios.get(`http://192.168.1.20:8090/v1/delete?fileType=`+name, header,
-            {
-                params: {
-
-                    //'fileType': name,
-                    'userId': userid
-
-                }
-            }
-        )
+        })
             .then((response) => {
                 alert('deleted')
             });
@@ -151,7 +165,7 @@ class Cards extends Component {
             isDownloaded: true,
             isDeleted: true,
             fileChosen: false,
-            text: ''
+            
 
 
         }

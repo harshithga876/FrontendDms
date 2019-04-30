@@ -23,6 +23,8 @@ class Navigation extends React.Component {
   redirectMethod = event => {
     
     console.log(event);
+    let user = JSON.parse(event.userId)
+    console.log(user)
     return(
       <div>
     
@@ -36,21 +38,16 @@ class Navigation extends React.Component {
   handleSearch = event => {
     let token = window.localStorage.getItem("tokenId");
     console.log(token);
-    // let header = {
-    //   headers: {
-    //     tokenId: token
-    //   }
-    // };
+    let header = {
+      headers: {
+        tokenId: token
+      }
+    };
     if (event.target && event.target.value.length >= 3) {
       axios
         .get(
-          "http://192.168.1.20:8090/v1/search?text=" + event.target.value,
-          {
-            params: {
-              'login': token,
-
-            }
-          }
+          "http://192.168.1.154:8090/v1/search?text=" + event.target.value,header
+          
 
         )
         .then(response => {
